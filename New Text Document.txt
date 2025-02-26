@@ -1,89 +1,111 @@
-Sure! Below is a full project structure for a PDF document viewer, where users can upload PDFs and view them securely without being able to download them easily. This project will have a **Node.js** backend for file handling and a **React** frontend for user interaction.
-
-### Project Structure:
-```
-/document-viewer
+/KorraX
 │
-├── /client                      # Frontend (React)
+├── /client                  # Frontend (React)
 │   ├── /public
-│   │   ├── index.html            # Main HTML file for the React app
-│   │   └── favicon.ico           # Favicon for the app
+│   │   ├── index.html
+│   │   └── favicon.ico
 │   ├── /src
-│   │   ├── App.js                # Main React component
-│   │   ├── index.js              # React entry point
+│   │   ├── App.js
+│   │   ├── index.js
 │   │   ├── components
-│   │   │   ├── Navbar.js         # Navigation bar component
-│   │   │   ├── PDFViewer.js      # PDF viewer component for rendering PDFs
-│   │   │   └── UploadForm.js     # Upload form for uploading PDFs
-│   │   ├── styles.css            # CSS for styling the frontend
-│   └── package.json              # React app dependencies
-│
-├── /server                      # Backend (Node.js)
+│   │   │   ├── Navbar.js
+│   │   │   ├── Portfolio.js
+│   │   │   ├── PDFViewer.js
+│   │   │   ├── Subscription.js
+│   │   │   └── ContactForm.js
+│   │   ├── context
+│   │   │   └── AuthContext.js
+│   │   ├── pages
+│   │   │   ├── Home.js
+│   │   │   ├── Product.js
+│   │   │   └── MyAccount.js
+│   │   └── styles.css
+│   ├── .gitignore
+|   ├── package.json
+│   └── package-lock.json 
+|
+├── /server                  # Backend (Node.js)
 │   ├── /config
-│   │   └── db.js                 # Configuration for database (if any)
+│   │   └── db.js
 │   ├── /controllers
-│   │   ├── pdfController.js      # Controller for handling PDFs
-│   │   └── uploadController.js   # Controller for handling file uploads
+│   │   ├── authController.js
+│   │   ├── pdfController.js
+│   │   └── subscriptionController.js
 │   ├── /models
-│   │   └── PDF.js                # Model for storing PDF details (if using DB)
+│   │   ├── User.js
+│   │   ├── PDF.js
+│   │   └── Subscription.js
 │   ├── /routes
-│   │   ├── pdfRoutes.js          # Routes for handling PDF file requests
-│   │   └── uploadRoutes.js       # Routes for handling file uploads
+│   │   ├── authRoutes.js
+│   │   ├── pdfRoutes.js
+│   │   └── subscriptionRoutes.js
 │   ├── /middleware
-│   │   └── authMiddleware.js     # (Optional) Middleware for authentication
-│   ├── server.js                 # Main entry point for the backend
-│   └── package.json              # Backend dependencies
+│   │   └── authMiddleware.js
+│   ├── server.js
+│   ├── .gitignore
+|   ├── package.json
+│   └── package-lock.json 
+│
+└── README.md
+└── script.js
 ```
 
-### 1. **Frontend: React (Client)**
+### Frontend Code (React)
 
-#### `/client/public/index.html`
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document Viewer</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div id="root"></div>
-</body>
-</html>
-```
-
-#### `/client/src/App.js`
-
+#### 1. `client/src/index.js`
 ```javascript
 import React from 'react';
-import Navbar from './components/Navbar';
-import UploadForm from './components/UploadForm';
-import PDFViewer from './components/PDFViewer';
+import { createRoot } from 'react-dom/client';
+import App from './App';
+import './styles.css';
 
-function App() {
+const root = createRoot(document.getElementById('root'));
+root.render(<App />);
+```
+
+#### 2. `client/src/App.js`
+```javascript
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import Portfolio from './components/Portfolio';
+import Product from './pages/Product';
+import MyAccount from './pages/MyAccount';
+import Subscription from './components/Subscription';
+import ContactForm from './components/ContactForm';
+
+const App = () => {
   return (
-    <div className="App">
+    <Router>
       <Navbar />
-      <UploadForm />
-      <PDFViewer />
-    </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/product/:id" element={<Product />} />
+        <Route path="/my-account" element={<MyAccount />} />
+        <Route path="/subscription" element={<Subscription />} />
+        <Route path="/contact" element={<ContactForm />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
 ```
 
-#### `/client/src/components/Navbar.js`
-
+#### 3. `client/src/components/Navbar.js`
 ```javascript
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   return (
     <nav>
-      <h1>Document Viewer</h1>
+      <Link to="/">Home</Link>
+      <Link to="/portfolio">Portfolio</Link>
+      <Link to="/subscription">Subscription</Link>
+      <Link to="/contact">Contact</Link>
     </nav>
   );
 };
@@ -91,232 +113,125 @@ const Navbar = () => {
 export default Navbar;
 ```
 
-#### `/client/src/components/UploadForm.js`
-
+#### 4. `client/src/components/PDFViewer.js`
 ```javascript
 import React, { useState } from 'react';
+import { Document, Page, pdfjs } from 'react-pdf';
 
-const UploadForm = () => {
-  const [file, setFile] = useState(null);
+// Set the worker source for pdf.js
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
+const PDFViewer = ({ pdfUrl }) => {
+  const [numPages, setNumPages] = useState(null);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append('document', file);
-
-    fetch('/api/upload', {
-      method: 'POST',
-      body: formData,
-    })
-      .then(response => response.json())
-      .then(data => {
-        alert('File uploaded successfully!');
-      })
-      .catch((error) => {
-        console.error('Error uploading file:', error);
-      });
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
   };
 
   return (
-    <div className="upload-form">
-      <form onSubmit={handleSubmit}>
-        <input type="file" accept=".pdf" onChange={handleFileChange} />
-        <button type="submit">Upload PDF</button>
-      </form>
-    </div>
-  );
-};
-
-export default UploadForm;
-```
-
-#### `/client/src/components/PDFViewer.js`
-
-```javascript
-import React, { useState, useEffect } from 'react';
-
-const PDFViewer = () => {
-  const [pdfUrl, setPdfUrl] = useState(null);
-
-  useEffect(() => {
-    // Get the PDF URL from the backend
-    fetch('/api/pdf')
-      .then((response) => response.json())
-      .then((data) => {
-        setPdfUrl(data.pdfUrl);
-      })
-      .catch((error) => {
-        console.error('Error fetching PDF:', error);
-      });
-  }, []);
-
-  if (!pdfUrl) {
-    return <div>Loading PDF...</div>;
-  }
-
-  return (
-    <div className="pdf-viewer">
-      <iframe src={pdfUrl} width="100%" height="600px" />
-    </div>
+    <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
+      {Array.from(new Array(numPages), (el, index) => (
+        <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+      ))}
+    </Document>
   );
 };
 
 export default PDFViewer;
 ```
 
-#### `/client/src/styles.css`
+#### 5. `client/src/pages/Home.js`
+```javascript
+import React from 'react';
 
-```css
-/* Global styles */
-body {
-  font-family: Arial, sans-serif;
-}
+const Home = () => {
+  return (
+    <div>
+      <h1>Welcome to My Portfolio</h1>
+      <p>Explore my work and subscribe for exclusive content.</p>
+    </div>
+  );
+};
 
-nav {
-  background-color: #333;
-  padding: 1rem;
-  color: white;
-  text-align: center;
-}
-
-.upload-form {
-  margin: 2rem;
-  text-align: center;
-}
-
-.pdf-viewer {
-  margin: 2rem;
-  text-align: center;
-}
-
-iframe {
-  border: none;
-}
+export default Home;
 ```
 
-#### `/client/package.json`
+#### 5. 
+### Backend Code (Node.js)
 
-```json
-{
-  "name": "document-viewer",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "dependencies": {
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-scripts": "4.0.3"
-  }
-}
-```
-
-### 2. **Backend: Node.js (Server)**
-
-#### `/server/server.js`
-
+#### 1. `server/server.js`
 ```javascript
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
+const mongoose = require('mongoose');
+const authRoutes = require('./routes/authRoutes');
+const pdfRoutes = require('./routes/pdfRoutes');
+const subscriptionRoutes = require('./routes/subscriptionRoutes');
+
 const app = express();
-const port = 5000;
+app.use(express.json());
 
-// Middleware for serving static files
-app.use(express.static('uploads'));
-
-// Set up multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-const upload = multer({ storage: storage });
-
-// Route for uploading PDF files
-app.post('/api/upload', upload.single('document'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).send('No file uploaded');
-  }
-  res.json({ message: 'File uploaded successfully', filename: req.file.filename });
+mongoose.connect('mongodb://localhost:27017/portfolio-ecommerce', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
-// Route to fetch the uploaded PDF URL for rendering
-app.get('/api/pdf', (req, res) => {
-  const pdfUrl = '/uploads/your-uploaded-file.pdf'; // Replace with dynamic logic if needed
-  res.json({ pdfUrl: pdfUrl });
-});
+app.use('/api/auth', authRoutes);
+app.use('/api/pdfs', pdfRoutes);
+app.use('/api/subscriptions', subscriptionRoutes);
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 ```
 
-#### `/server/package.json`
+#### 2. `server/models/User.js`
+```javascript
+const mongoose = require('mongoose');
 
-```json
-{
-  "name": "document-viewer-server",
-  "version": "1.0.0",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2",
-    "multer": "^1.4.5-lts.1",
-    "path": "^0.12.7"
-  }
-}
+const userSchema = new mongoose.Schema({
+  username: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  subscription: { type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' },
+});
+
+module.exports = mongoose.model('User', userSchema);
 ```
 
-### 3. **Project Setup**
+#### 3. `server/routes/authRoutes.js`
+```javascript
+const express = require('express');
+const { register, login } = require('../controllers/authController');
+const router = express.Router();
 
-1. **Frontend (React)**: 
-   - In the `/client` folder, run `npm install` to install React dependencies.
-   - Run `npm start` to start the React development server.
+router.post('/register', register);
+router.post('/login', login);
 
-2. **Backend (Node.js)**:
-   - In the `/server` folder, run `npm install` to install Node.js dependencies.
-   - Run `node server.js` to start the Node.js server.
+module.exports = router;
+```
 
-3. **File Uploading**: 
-   - When a PDF is uploaded via the React form, it is sent to the Node.js server using `multer` for handling file uploads.
-   - The server responds with the file path, which the frontend uses to display the PDF in an `<iframe>`.
+#### 4. `server/controllers/authController.js`
+```javascript
+const User = require('../models/User');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-### 4. **Push to GitHub**
+exports.register = async (req, res) => {
+  const { username, email, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = new User({ username, email, password: hashedPassword });
+  await user.save();
+  res.status(201).json({ message: 'User registered successfully' });
+};
 
-1. **Initialize a Git repository**:
-
-   ```bash
-   git init
-   ```
-
-2. **Add files to the Git repository**:
-
-   ```bash
-   git add .
-   git commit -m "Initial commit"
-   ```
-
-3. **Push to GitHub**:
-
-   ```bash
-   git remote add origin <your-repo-url>
-   git push -u origin master
-   ```
-
-This project structure allows you to upload PDF documents through a React frontend, send them to a Node.js backend for storage, and securely display them in the browser using a `<iframe>`.
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    return res.status(401).json({ message: 'Invalid credentials' });
+  }
+  const token = jwt.sign({ id: user._id }, 'your_jwt_secret');
+  res.json({ token });
+};
+```
