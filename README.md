@@ -6,7 +6,7 @@ Creating a complete portfolio and e-commerce website with PDF viewing and a subs
 ### Project Structure
 
 ```
-/portfolio-ecommerce
+/KorraX
 │
 ├── /client                  # Frontend (React)
 │   ├── /public
