@@ -10,9 +10,32 @@
     <meta property="og:description" content="KorraX - Your ultimate solution" />
     <meta property="og:image" content="/path/to/image.jpg" />
     <meta property="og:url" content="https://www.korrax.com" />
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/index.js"></script>
+    <script type="module">
+      import React from 'react';
+      import { createRoot } from 'react-dom/client';
+      import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+      import Navbar from './components/Navbar.jsx';
+      import Footer from './components/Footer.jsx';
+      import Home from './pages/Home.jsx';
+      import Portfolio from './components/Portfolio.jsx';
+      import Product from './pages/Product.jsx';
+      import MyAccount from './pages/MyAccount.jsx';
+      import Subscription from './components/Subscription.jsx';
+      import ContactForm from './components/ContactForm.jsx';
+      import NotFound from './pages/NotFound.jsx';
+      import App from './App.jsx';
+      import './styles.css';
+
+      const root = createRoot(document.getElementById('root'));
+      root.render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
+    </script>
   </body>
 </html>

@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -19,6 +18,8 @@ export default defineConfig({
     sourcemap: true,
   },
   esbuild: {
-    loader: { '.js': 'jsx' }, // Enable JSX parsing for .js files
+    loader: {
+      '.js': 'jsx', // Enable JSX parsing for .js files
+    },
   },
 });

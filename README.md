@@ -6,50 +6,59 @@ Creating a complete portfolio and e-commerce website with PDF viewing and a subs
 ### Project Structure
 
 ```
-/KorraX
-│
-├── /client                  # Frontend (React)
-│   ├── /public
-│   │   ├── index.html
-│   │   └── favicon.ico
-│   ├── /src
-│   │   ├── App.js
-│   │   ├── index.js
-│   │   ├── components
-│   │   │   ├── Navbar.js
-│   │   │   ├── Portfolio.js
-│   │   │   ├── PDFViewer.js
-│   │   │   ├── Subscription.js
-│   │   │   └── ContactForm.js
-│   │   ├── context
+KorraX/
+├── client/          #frondend
+│   ├── public/
+│   │   ├── favicon.ico
+│   │   └── index.html
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── ContactForm.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Navbar.css
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Portfolio.css
+│   │   │   ├── Portfolio.jsx
+│   │   │   ├── Subscription.css
+│   │   │   └── Subscription.jsx
+│   │   ├── context/
 │   │   │   └── AuthContext.js
-│   │   ├── pages
-│   │   │   ├── Home.js
-│   │   │   ├── Product.js
-│   │   │   └── MyAccount.js
+│   │   ├── pages/
+│   │   │   ├── Home.css
+│   │   │   ├── Home.jsx
+│   │   │   ├── MyAccount.css
+│   │   │   ├── MyAccount.jsx
+│   │   │   ├── NotFound.css
+│   │   │   ├── NotFound.jsx
+│   │   │   ├── Product.css
+│   │   │   └── Product.jsx
+│   │   ├── App.jsx
+│   │   ├── index.jsx
 │   │   └── styles.css
-│   └── package.json
-│
-├── /server                  # Backend (Node.js)
-│   ├── /config
-│   │   └── db.js
-│   ├── /controllers
+│   ├── .gitignore
+│   ├── package.json
+│   └── vite.config.js
+├── server/      #Backend
+│   ├── controllers/
 │   │   ├── authController.js
-│   │   ├── pdfController.js
-│   │   └── subscriptionController.js
-│   ├── /models
-│   │   ├── User.js
-│   │   ├── PDF.js
-│   │   └── Subscription.js
-│   ├── /routes
+│   │   ├── productController.js
+│   │   └── userController.js
+│   ├── models/
+│   │   ├── productModel.js
+│   │   └── userModel.js
+│   ├── routes/
 │   │   ├── authRoutes.js
-│   │   ├── pdfRoutes.js
-│   │   └── subscriptionRoutes.js
-│   ├── /middleware
-│   │   └── authMiddleware.js
+│   │   ├── productRoutes.js
+│   │   └── userRoutes.js
+│   ├── middleware/
+│   │   ├── authMiddleware.js
+│   │   └── errorMiddleware.js
+│   ├── config/
+│   │   └── db.js
+│   ├── .gitignore
+│   ├── package.json
 │   ├── server.js
-│   └── package.json
-│
+│  
 └── README.md
 ```
 
