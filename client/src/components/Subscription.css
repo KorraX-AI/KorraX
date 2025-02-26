@@ -1,38 +1,21 @@
-section {
-  text-align: center;
-  padding: 2rem;
-}
-
-form {
-  margin-top: 1rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-input {
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  width: 100%;
-  max-width: 300px;
-}
-
-button {
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-p {
-  margin-top: 1rem;
-  color: green;
-}
+.subscription {
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .subscription form {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .subscription input {
+    padding: 0.5rem;
+  }
+  
+  .subscription button {
+    padding: 0.5rem 1rem;
+    background-color: #333;
+    color: white;
+    border: none;
+  }

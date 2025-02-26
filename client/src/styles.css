@@ -1,62 +1,23 @@
-body {
-  background-color: #000; /* Black background */
-  color: #fff; /* White text */
-  font-family: Arial, sans-serif;
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-nav {
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.app {
+  min-height: 100vh;
   display: flex;
-  gap: 20px;
-  padding: 10px;
-  background-color: #333; /* Dark background for the navbar */
-}
-
-nav a {
-  text-decoration: none;
-  color: #fff; /* White text for links */
-}
-
-nav a:hover {
-  color: #ff0000; /* Red color on hover */
-}
-
-h1, h2, h3, h4, h5, h6 {
-  color: #ff0000; /* Red color for headings */
-}
-
-button {
-  background-color: #ff0000; /* Red background for buttons */
-  color: #fff; /* White text for buttons */
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-button:hover {
-  background-color: #cc0000; /* Darker red on hover */
-}
-
-input, textarea {
-  background-color: #333; /* Dark background for input fields */
-  color: #fff; /* White text for input fields */
-  border: 1px solid #555;
-  padding: 10px;
-  border-radius: 5px;
-}
-
-input::placeholder, textarea::placeholder {
-  color: #aaa; /* Light gray placeholder text */
+  flex-direction: column;
 }
 
 footer {
-  background-color: #333; /* Dark background for the footer */
-  color: #fff; /* White text for the footer */
+  margin-top: auto;
+  padding: 1rem;
   text-align: center;
-  padding: 20px;
-  position: fixed;
-  width: 100%;
-  bottom: 0;
+  background-color: #f0f0f0;
 }

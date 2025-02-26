@@ -1,34 +1,27 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import './Navbar.css'; // Assuming you have a CSS file for styling
+import { Link } from 'react-router-dom';
+import './Navbar.css';
+import { useAuth } from '../context/AuthContext';
 
-const Navbar = () => {
+function Navbar() {
+  const { user, logout } = useAuth();
+
   return (
     <nav className="navbar">
-      <ul>
-        <li>
-          <NavLink exact to="/" activeClassName="active">
-            Home
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/portfolio" activeClassName="active">
-            Portfolio
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/subscription" activeClassName="active">
-            Subscription
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/contact" activeClassName="active">
-            Contact
-          </NavLink>
-        </li>
-      </ul>
+      <Link to="/" className="logo">KorraX</Link>
+      <div className="nav-links">
+        <Link to="/">Home</Link>
+        <Link to="/product">Products</Link>
+        {user ? (
+          <>
+            <Link to="/account">My Account</Link>
+            <button onClick={logout}>Logout</button>
+          </>
+        ) : (
+          <Link to="/account">Login</Link>
+        )}
+      </div>
     </nav>
   );
-};
+}
 
 export default Navbar;

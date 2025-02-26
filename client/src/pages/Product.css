@@ -1,14 +1,4 @@
-.product-container {
-  text-align: center;
-  padding: 2rem;
-}
-
-.product-container h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-.product-container p {
-  font-size: 1.25rem;
-  margin: 0.5rem 0;
-}
+.product {
+    padding: 2rem;
+    text-align: center;
+  }

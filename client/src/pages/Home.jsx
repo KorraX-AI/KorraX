@@ -1,14 +1,17 @@
-import React from 'react';
-import './Home.css'; // Assuming you have a CSS file for styling
+import ContactForm from '../components/ContactForm';
+import Portfolio from '../components/Portfolio';
+import Subscription from '../components/Subscription';
+import './Home.css';
 
-const Home = () => {
+function Home() {
   return (
-    <div className="home-container">
-      <h1>Welcome to My Portfolio</h1>
-      <p>Explore my work and subscribe for exclusive content.</p>
-      <button className="cta-button">Explore Portfolio</button>
+    <div className="home">
+      <h1>Welcome to KorraX</h1>
+      <Portfolio />
+      <ContactForm />
+      <Subscription />
     </div>
   );
-};
+}
 
 export default Home;

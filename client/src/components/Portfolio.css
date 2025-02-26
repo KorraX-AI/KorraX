@@ -1,11 +1,15 @@
-.portfolio-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.portfolio-item {
-  border: 1px solid #ccc;
-  padding: 1rem;
-  border-radius: 5px;
-}
+.portfolio {
+    padding: 2rem;
+  }
+  
+  .portfolio-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  
+  .portfolio-item {
+    background-color: #f0f0f0;
+    padding: 1rem;
+    text-align: center;
+  }

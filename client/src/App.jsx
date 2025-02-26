@@ -1,31 +1,29 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar.jsx';
-import Footer from './components/Footer.jsx';
-import Home from './pages/Home.jsx';
-import Portfolio from './components/Portfolio.jsx';
-import Product from './pages/Product.jsx';
-import MyAccount from './pages/MyAccount.jsx';
-import Subscription from './components/Subscription.jsx';
-import ContactForm from './components/ContactForm.jsx';
-import NotFound from './pages/NotFound.jsx';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import MyAccount from './pages/MyAccount';
+import Product from './pages/Product';
+import NotFound from './pages/NotFound';
 
-const App = () => {
+function App() {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/portfolio" element={<Portfolio />} />
-        <Route path="/product/:id" element={<Product />} />
-        <Route path="/my-account" element={<MyAccount />} />
-        <Route path="/subscription" element={<Subscription />} />
-        <Route path="/contact" element={<ContactForm />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <Footer />
-    </Router>
+    <AuthProvider>
+      <BrowserRouter>
+        <div className="app">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/account" element={<MyAccount />} />
+            <Route path="/product" element={<Product />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <Footer />
+        </div>
+      </BrowserRouter>
+    </AuthProvider>
   );
-};
+}
 
 export default App;

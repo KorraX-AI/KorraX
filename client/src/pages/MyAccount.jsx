@@ -1,21 +1,26 @@
-import React from 'react';
-import './MyAccount.css'; // Assuming you have a CSS file for styling
+import { useAuth } from '../context/AuthContext';
+import './MyAccount.css';
 
-const MyAccount = () => {
+function MyAccount() {
+  const { user, login } = useAuth();
+
+  if (!user) {
+    return (
+      <div className="my-account">
+        <h1>Login</h1>
+        <button onClick={() => login({ id: 1, name: 'Test User' })}>
+          Login (Demo)
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div className="account-container">
-      <h2>My Account</h2>
-      <div className="account-details">
-        <p><strong>Name:</strong> John Doe</p>
-        <p><strong>Email:</strong> john.doe@example.com</p>
-      </div>
-      <div className="account-actions">
-        <button className="account-button">Edit Profile</button>
-        <button className="account-button">Change Password</button>
-        <button className="account-button">Logout</button>
-      </div>
+    <div className="my-account">
+      <h1>My Account</h1>
+      <p>Welcome, {user.name}!</p>
     </div>
   );
-};
+}
 
 export default MyAccount;
