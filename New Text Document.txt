@@ -1,0 +1,322 @@
+Sure! Below is a full project structure for a PDF document viewer, where users can upload PDFs and view them securely without being able to download them easily. This project will have a **Node.js** backend for file handling and a **React** frontend for user interaction.
+
+### Project Structure:
+```
+/document-viewer
+│
+├── /client                      # Frontend (React)
+│   ├── /public
+│   │   ├── index.html            # Main HTML file for the React app
+│   │   └── favicon.ico           # Favicon for the app
+│   ├── /src
+│   │   ├── App.js                # Main React component
+│   │   ├── index.js              # React entry point
+│   │   ├── components
+│   │   │   ├── Navbar.js         # Navigation bar component
+│   │   │   ├── PDFViewer.js      # PDF viewer component for rendering PDFs
+│   │   │   └── UploadForm.js     # Upload form for uploading PDFs
+│   │   ├── styles.css            # CSS for styling the frontend
+│   └── package.json              # React app dependencies
+│
+├── /server                      # Backend (Node.js)
+│   ├── /config
+│   │   └── db.js                 # Configuration for database (if any)
+│   ├── /controllers
+│   │   ├── pdfController.js      # Controller for handling PDFs
+│   │   └── uploadController.js   # Controller for handling file uploads
+│   ├── /models
+│   │   └── PDF.js                # Model for storing PDF details (if using DB)
+│   ├── /routes
+│   │   ├── pdfRoutes.js          # Routes for handling PDF file requests
+│   │   └── uploadRoutes.js       # Routes for handling file uploads
+│   ├── /middleware
+│   │   └── authMiddleware.js     # (Optional) Middleware for authentication
+│   ├── server.js                 # Main entry point for the backend
+│   └── package.json              # Backend dependencies
+```
+
+### 1. **Frontend: React (Client)**
+
+#### `/client/public/index.html`
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Viewer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>
+```
+
+#### `/client/src/App.js`
+
+```javascript
+import React from 'react';
+import Navbar from './components/Navbar';
+import UploadForm from './components/UploadForm';
+import PDFViewer from './components/PDFViewer';
+
+function App() {
+  return (
+    <div className="App">
+      <Navbar />
+      <UploadForm />
+      <PDFViewer />
+    </div>
+  );
+}
+
+export default App;
+```
+
+#### `/client/src/components/Navbar.js`
+
+```javascript
+import React from 'react';
+
+const Navbar = () => {
+  return (
+    <nav>
+      <h1>Document Viewer</h1>
+    </nav>
+  );
+};
+
+export default Navbar;
+```
+
+#### `/client/src/components/UploadForm.js`
+
+```javascript
+import React, { useState } from 'react';
+
+const UploadForm = () => {
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('document', file);
+
+    fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    })
+      .then(response => response.json())
+      .then(data => {
+        alert('File uploaded successfully!');
+      })
+      .catch((error) => {
+        console.error('Error uploading file:', error);
+      });
+  };
+
+  return (
+    <div className="upload-form">
+      <form onSubmit={handleSubmit}>
+        <input type="file" accept=".pdf" onChange={handleFileChange} />
+        <button type="submit">Upload PDF</button>
+      </form>
+    </div>
+  );
+};
+
+export default UploadForm;
+```
+
+#### `/client/src/components/PDFViewer.js`
+
+```javascript
+import React, { useState, useEffect } from 'react';
+
+const PDFViewer = () => {
+  const [pdfUrl, setPdfUrl] = useState(null);
+
+  useEffect(() => {
+    // Get the PDF URL from the backend
+    fetch('/api/pdf')
+      .then((response) => response.json())
+      .then((data) => {
+        setPdfUrl(data.pdfUrl);
+      })
+      .catch((error) => {
+        console.error('Error fetching PDF:', error);
+      });
+  }, []);
+
+  if (!pdfUrl) {
+    return <div>Loading PDF...</div>;
+  }
+
+  return (
+    <div className="pdf-viewer">
+      <iframe src={pdfUrl} width="100%" height="600px" />
+    </div>
+  );
+};
+
+export default PDFViewer;
+```
+
+#### `/client/src/styles.css`
+
+```css
+/* Global styles */
+body {
+  font-family: Arial, sans-serif;
+}
+
+nav {
+  background-color: #333;
+  padding: 1rem;
+  color: white;
+  text-align: center;
+}
+
+.upload-form {
+  margin: 2rem;
+  text-align: center;
+}
+
+.pdf-viewer {
+  margin: 2rem;
+  text-align: center;
+}
+
+iframe {
+  border: none;
+}
+```
+
+#### `/client/package.json`
+
+```json
+{
+  "name": "document-viewer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-scripts": "4.0.3"
+  }
+}
+```
+
+### 2. **Backend: Node.js (Server)**
+
+#### `/server/server.js`
+
+```javascript
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const app = express();
+const port = 5000;
+
+// Middleware for serving static files
+app.use(express.static('uploads'));
+
+// Set up multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage: storage });
+
+// Route for uploading PDF files
+app.post('/api/upload', upload.single('document'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded');
+  }
+  res.json({ message: 'File uploaded successfully', filename: req.file.filename });
+});
+
+// Route to fetch the uploaded PDF URL for rendering
+app.get('/api/pdf', (req, res) => {
+  const pdfUrl = '/uploads/your-uploaded-file.pdf'; // Replace with dynamic logic if needed
+  res.json({ pdfUrl: pdfUrl });
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
+```
+
+#### `/server/package.json`
+
+```json
+{
+  "name": "document-viewer-server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "path": "^0.12.7"
+  }
+}
+```
+
+### 3. **Project Setup**
+
+1. **Frontend (React)**: 
+   - In the `/client` folder, run `npm install` to install React dependencies.
+   - Run `npm start` to start the React development server.
+
+2. **Backend (Node.js)**:
+   - In the `/server` folder, run `npm install` to install Node.js dependencies.
+   - Run `node server.js` to start the Node.js server.
+
+3. **File Uploading**: 
+   - When a PDF is uploaded via the React form, it is sent to the Node.js server using `multer` for handling file uploads.
+   - The server responds with the file path, which the frontend uses to display the PDF in an `<iframe>`.
+
+### 4. **Push to GitHub**
+
+1. **Initialize a Git repository**:
+
+   ```bash
+   git init
+   ```
+
+2. **Add files to the Git repository**:
+
+   ```bash
+   git add .
+   git commit -m "Initial commit"
+   ```
+
+3. **Push to GitHub**:
+
+   ```bash
+   git remote add origin <your-repo-url>
+   git push -u origin master
+   ```
+
+This project structure allows you to upload PDF documents through a React frontend, send them to a Node.js backend for storage, and securely display them in the browser using a `<iframe>`.
