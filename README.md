@@ -186,7 +186,7 @@ const userSchema = new mongoose.Schema({
   subscription: { type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' },
 });
 
-module.exports = mongoose.model('User ', userSchema);
+module.exports = mongoose.model('User', userSchema);
 ```
 
 #### 3. `server/routes/authRoutes.js`
@@ -212,7 +212,7 @@ exports.register = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = new User({ username, email, password: hashedPassword });
   await user.save();
-  res.status(201).json({ message: 'User  registered successfully' });
+  res.status(201).json({ message: 'User registered successfully' });
 };
 
 exports.login = async (req, res) => {

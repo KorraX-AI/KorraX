@@ -7,4 +7,4 @@ const userSchema = new mongoose.Schema({
   subscription: { type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' },
 });
 
-module.exports = mongoose.model('User ', userSchema);
+module.exports = mongoose.model('User', userSchema);
