@@ -10,7 +10,7 @@
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^7.8.6",
         "sequelize": "^6.6.5",
-        "pg": "^8.7.1" // or "mysql2": "^2.3.3" for MySQL
+        "pg": "^8.7.1"
     },
     "scripts": {
         "start": "node server.js",
