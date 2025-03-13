@@ -1,16 +1,8 @@
-const mongoose = require('mongoose');
+const { Sequelize } = require('sequelize');
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect('mongodb://localhost:27017/portfolio-ecommerce', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
-    console.log('MongoDB connected');
-  } catch (err) {
-    console.error(err.message);
-    process.exit(1);
-  }
-};
+const sequelize = new Sequelize('database', 'username', 'password', {
+  host: 'localhost',
+  dialect: 'postgres' // or 'mysql'
+});
 
-module.exports = connectDB;
+module.exports = sequelize;

@@ -1,14 +1,15 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/db');
 
-const pdfSchema = new mongoose.Schema({
+const PDF = sequelize.define('PDF', {
   url: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false
   },
   uploadedAt: {
-    type: Date,
-    default: Date.now
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
   }
 });
 
-module.exports = mongoose.model('PDF', pdfSchema);
+module.exports = PDF;

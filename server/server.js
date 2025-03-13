@@ -1,6 +1,7 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path'); // Add this line
+const { Sequelize } = require('sequelize');
 const authRoutes = require('./routes/authRoutes');
 const pdfRoutes = require('./routes/pdfRoutes');
 const subscriptionRoutes = require('./routes/subscriptionRoutes');
@@ -10,15 +11,28 @@ const app = express();
 app.use(express.json());
 app.use(cors()); // Allow frontend to connect
 
-mongoose.connect('mongodb://127.0.0.1:27017/portfolio-ecommerce', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+// Initialize Sequelize
+const sequelize = new Sequelize('database', 'username', 'password', {
+  host: 'localhost',
+  dialect: 'postgres' // or 'mysql'
 });
+
+sequelize.authenticate()
+  .then(() => console.log('Database connected'))
+  .catch(err => console.error('Unable to connect to the database:', err));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/pdfs', pdfRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/products', productRoutes);
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../client/build'))); // Add this line
+
+// The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
+app.get('*', (req, res) => { // Add this block
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
 
 // Global error handler
 app.use((err, req, res, next) => {

@@ -5,5 +5,6 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000, // Change to desired port
+    historyApiFallback: true // Add this line
   },
 });

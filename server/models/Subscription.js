@@ -1,14 +1,15 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/db');
 
-const subscriptionSchema = new mongoose.Schema({
+const Subscription = sequelize.define('Subscription', {
   plan: {
-    type: String,
-    required: true
+    type: DataTypes.STRING,
+    allowNull: false
   },
   createdAt: {
-    type: Date,
-    default: Date.now
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
   }
 });
 
-module.exports = mongoose.model('Subscription', subscriptionSchema);
+module.exports = Subscription;
