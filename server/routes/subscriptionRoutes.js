@@ -1,9 +1,9 @@
-
 const express = require('express');
 const router = express.Router();
-const { createSubscription, getSubscriptions } = require('../controllers/subscriptionController');
+const subscriptionController = require('../controllers/subscriptionController');
+const authMiddleware = require('../middleware/authMiddleware');
 
-router.post('/create', createSubscription);
-router.get('/', getSubscriptions);
+router.post('/', authMiddleware, subscriptionController.createSubscription);
+router.get('/', authMiddleware, subscriptionController.getSubscriptions);
 
 module.exports = router;

@@ -4,12 +4,13 @@ const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const pdfRoutes = require('./routes/pdfRoutes');
 const subscriptionRoutes = require('./routes/subscriptionRoutes');
+const productRoutes = require('./routes/productRoutes');
 
 const app = express();
 app.use(express.json());
 app.use(cors()); // Allow frontend to connect
 
-mongoose.connect('mongodb://localhost:27017/portfolio-ecommerce', {
+mongoose.connect('mongodb://127.0.0.1:27017/portfolio-ecommerce', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -17,6 +18,7 @@ mongoose.connect('mongodb://localhost:27017/portfolio-ecommerce', {
 app.use('/api/auth', authRoutes);
 app.use('/api/pdfs', pdfRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
+app.use('/api/products', productRoutes);
 
 // Global error handler
 app.use((err, req, res, next) => {

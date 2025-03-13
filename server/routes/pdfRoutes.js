@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { uploadPDF, getPDFs } = require('../controllers/pdfController');
+const pdfController = require('../controllers/pdfController');
+const authMiddleware = require('../middleware/authMiddleware');
 
-router.post('/upload', uploadPDF);
-router.get('/', getPDFs);
+router.post('/upload', authMiddleware, pdfController.uploadPDF);
+router.get('/', authMiddleware, pdfController.getPDFs);
 
 module.exports = router;

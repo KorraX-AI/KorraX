@@ -30,15 +30,18 @@
 │   ├── /controllers
 │   │   ├── authController.js
 │   │   ├── pdfController.js
-│   │   └── subscriptionController.js
+│   │   ├── subscriptionController.js
+│   │   └── productController.js
 │   ├── /models
 │   │   ├── User.js
 │   │   ├── PDF.js
-│   │   └── Subscription.js
+│   │   ├── Subscription.js
+│   │   └── Product.js
 │   ├── /routes
 │   │   ├── authRoutes.js
 │   │   ├── pdfRoutes.js
-│   │   └── subscriptionRoutes.js
+│   │   ├── subscriptionRoutes.js
+│   │   └── productRoutes.js
 │   ├── /middleware
 │   │   └── authMiddleware.js
 │   ├── server.js
@@ -48,190 +51,4 @@
 │
 └── README.md
 └── script.js
-```
-
-### Frontend Code (React)
-
-#### 1. `client/src/index.js`
-```javascript
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App';
-import './styles.css';
-
-const root = createRoot(document.getElementById('root'));
-root.render(<App />);
-```
-
-#### 2. `client/src/App.js`
-```javascript
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Portfolio from './components/Portfolio';
-import Product from './pages/Product';
-import MyAccount from './pages/MyAccount';
-import Subscription from './components/Subscription';
-import ContactForm from './components/ContactForm';
-
-const App = () => {
-  return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/portfolio" element={<Portfolio />} />
-        <Route path="/product/:id" element={<Product />} />
-        <Route path="/my-account" element={<MyAccount />} />
-        <Route path="/subscription" element={<Subscription />} />
-        <Route path="/contact" element={<ContactForm />} />
-      </Routes>
-    </Router>
-  );
-};
-
-export default App;
-```
-
-#### 3. `client/src/components/Navbar.js`
-```javascript
-import React from 'react';
-import { Link } from 'react-router-dom';
-
-const Navbar = () => {
-  return (
-    <nav>
-      <Link to="/">Home</Link>
-      <Link to="/portfolio">Portfolio</Link>
-      <Link to="/subscription">Subscription</Link>
-      <Link to="/contact">Contact</Link>
-    </nav>
-  );
-};
-
-export default Navbar;
-```
-
-#### 4. `client/src/components/PDFViewer.js`
-```javascript
-import React, { useState } from 'react';
-import { Document, Page, pdfjs } from 'react-pdf';
-
-// Set the worker source for pdf.js
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-
-const PDFViewer = ({ pdfUrl }) => {
-  const [numPages, setNumPages] = useState(null);
-
-  const onDocumentLoadSuccess = ({ numPages }) => {
-    setNumPages(numPages);
-  };
-
-  return (
-    <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
-      {Array.from(new Array(numPages), (el, index) => (
-        <Page key={`page_${index + 1}`} pageNumber={index + 1} />
-      ))}
-    </Document>
-  );
-};
-
-export default PDFViewer;
-```
-
-#### 5. `client/src/pages/Home.js`
-```javascript
-import React from 'react';
-
-const Home = () => {
-  return (
-    <div>
-      <h1>Welcome to My Portfolio</h1>
-      <p>Explore my work and subscribe for exclusive content.</p>
-    </div>
-  );
-};
-
-export default Home;
-```
-
-#### 5. 
-### Backend Code (Node.js)
-
-#### 1. `server/server.js`
-```javascript
-const express = require('express');
-const mongoose = require('mongoose');
-const authRoutes = require('./routes/authRoutes');
-const pdfRoutes = require('./routes/pdfRoutes');
-const subscriptionRoutes = require('./routes/subscriptionRoutes');
-
-const app = express();
-app.use(express.json());
-
-mongoose.connect('mongodb://localhost:27017/portfolio-ecommerce', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-app.use('/api/auth', authRoutes);
-app.use('/api/pdfs', pdfRoutes);
-app.use('/api/subscriptions', subscriptionRoutes);
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-```
-
-#### 2. `server/models/User.js`
-```javascript
-const mongoose = require('mongoose');
-
-const userSchema = new mongoose.Schema({
-  username: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  subscription: { type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' },
-});
-
-module.exports = mongoose.model('User', userSchema);
-```
-
-#### 3. `server/routes/authRoutes.js`
-```javascript
-const express = require('express');
-const { register, login } = require('../controllers/authController');
-const router = express.Router();
-
-router.post('/register', register);
-router.post('/login', login);
-
-module.exports = router;
-```
-
-#### 4. `server/controllers/authController.js`
-```javascript
-const User = require('../models/User');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-
-exports.register = async (req, res) => {
-  const { username, email, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const user = new User({ username, email, password: hashedPassword });
-  await user.save();
-  res.status(201).json({ message: 'User registered successfully' });
-};
-
-exports.login = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return res.status(401).json({ message: 'Invalid credentials' });
-  }
-  const token = jwt.sign({ id: user._id }, 'your_jwt_secret');
-  res.json({ token });
-};
 ```
