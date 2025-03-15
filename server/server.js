@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const sequelize = require('./config/db'); // Update this line
+const sequelize = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const pdfRoutes = require('./routes/pdfRoutes');
 const subscriptionRoutes = require('./routes/subscriptionRoutes');
@@ -12,33 +12,24 @@ app.use(express.json());
 app.use(cors()); // Allow frontend to connect
 
 // Initialize Sequelize
-sequelize.authenticate()
-  .then(() => console.log('Database connected'))
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-    process.exit(1); // Exit the process with an error code
-  });
+sequelize.sync()
+    .then(() => console.log('Database connected'))
+    .catch(err => console.log('Error connecting to DB:', err));
 
+// API Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/pdfs', pdfRoutes);
-app.use('/api/subscriptions', subscriptionRoutes);
+app.use('/api/pdf', pdfRoutes);
+app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/products', productRoutes);
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../client/build')));
+// Serve static frontend files
+const buildPath = path.join(__dirname, 'client', 'build');
+app.use(express.static(buildPath));
 
-// The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
+// Catch-all route for React frontend
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build/index.html'));
-});
-
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong!' });
+    res.sendFile(path.join(buildPath, 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
