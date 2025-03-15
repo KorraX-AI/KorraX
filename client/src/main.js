@@ -1,3 +1,10 @@
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("root").innerHTML = "<h1>Welcome to KorraX</h1>";
-});
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App"; // Ensure this path is correct
+import "./index.css"; // Ensure styles are loaded
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>
+);
