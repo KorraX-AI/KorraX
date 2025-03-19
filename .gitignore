@@ -6,3 +6,5 @@ instance/
 *.sqlite3
 *.log
 migrations/
+.conda/
+.vscode/
