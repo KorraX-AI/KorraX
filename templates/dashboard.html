@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Dashboard</h2>
+    <p>Welcome, {{ user.username }}!</p>
+
+    <div class="dashboard-links">
+        <a href="{{ url_for('product.add_product') }}" class="btn">Add New Product</a>
+        <a href="{{ url_for('product.product_list') }}" class="btn">Manage Products</a>
+    </div>
+
+    <div class="user-stats">
+        <h3>Your Subscribed Products</h3>
+        {% if subscribed_products %}
+        <ul class="responsive-list">
+            {% for product in subscribed_products %}
+            <li class="responsive-item">
+                <h4>{{ product.name }}</h4>
+                <p>{{ product.description }}</p>
+                <a href="{{ url_for('product.serve_pdf', product_id=product.id) }}" class="btn">View PDF</a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>You have not subscribed to any products yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

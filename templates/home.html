@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div id="hero" class="hero">
+    <h2>Welcome to KorraX</h2>
+    <p>Your one-stop shop for premium, view-only PDF documents. Explore our collection of educational, professional, and creative resources.</p>
+    <a href="{{ url_for('product.product_list') }}" class="cta-button">Shop Now</a>
+</div>
+
+<div class="container">
+    <h2>Featured Products</h2>
+    <div class="product-grid">
+        {% for product in featured_products %}
+        <div class="product-card">
+            <h3>{{ product.name }}</h3>
+            <p>Price: ₹{{ product.price }}</p>
+            <a href="{{ url_for('product.view_product', product_id=product.id) }}" class="btn">View Details</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

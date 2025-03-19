@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}PDF Viewer{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>{{ product.name }}</h2>
+    <div id="pdf-viewer" style="width: 100%; height: 600px; border: none;"></div>
+</div>
+<script src="{{ url_for('static', filename='js/pdf.min.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const url = "{{ url_for('static', filename=product.file_path) }}";
+
+        const pdfjsLib = window['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "{{ url_for('static', filename='js/pdf.worker.min.js') }}";
+
+        const pdfViewer = document.getElementById('pdf-viewer');
+
+        pdfjsLib.getDocument(url).promise.then(function (pdf) {
+            pdf.getPage(1).then(function (page) {
+                const viewport = page.getViewport({ scale: 1.5 });
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                pdfViewer.appendChild(canvas);
+
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                page.render(renderContext);
+            });
+        });
+    });
+</script>
+{% endblock %}

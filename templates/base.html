@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}KorraX{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="container">
+            <h1><a href="{{ url_for('home') }}">KorraX</a></h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('product.product_list') }}">Products</a></li>
+                    <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+                    {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 KorraX. All rights reserved. <a href="#">Privacy Policy</a></p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        // Prevent unauthorized access to sensitive pages
+        if (!document.referrer && window.location.pathname.includes("dashboard")) {
+            alert("Unauthorized access is prohibited.");
+            window.location.href = "/";
+        }
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

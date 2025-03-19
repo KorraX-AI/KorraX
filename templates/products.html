@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>All Products</h2>
+    <form method="GET" action="{{ url_for('product.product_list') }}" class="neumorphic-form">
+        <div class="neumorphic-input-wrapper">
+            <input type="text" name="search" placeholder="Search products..." value="{{ request.args.get('search', '') }}">
+        </div>
+        <button type="submit" class="btn">Search</button>
+    </form>
+    {% if products %}
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <h3>{{ product.name }}</h3>
+            <p>Category: {{ product.category }}</p>
+            <p>{{ product.description }}</p>
+            <p>Price: ₹{{ product.price }}</p>
+            <a href="{{ url_for('product.view_product', product_id=product.id) }}" class="btn">View Details</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No products match your search. Please try again.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>{{ product.name }}</h2>
+    <p>{{ product.description }}</p>
+    <p>Category: {{ product.category }}</p>
+    <p>Price: ₹{{ product.price }}</p>
+    <a href="{{ url_for('product.serve_pdf', product_id=product.id) }}" class="btn">View PDF</a>
+</div>
+{% endblock %}

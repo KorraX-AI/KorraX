@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="neumorphic-card">
+        <div class="neumorphic-card__header">Login</div>
+        <form method="POST" action="{{ url_for('auth.login') }}" class="neumorphic-form">
+            <div class="neumorphic-input-wrapper">
+                <label for="neumorphic-email">Email</label>
+                <input type="email" name="email" id="neumorphic-email" placeholder="Enter your email" required>
+            </div>
+            <div class="neumorphic-input-wrapper">
+                <label for="neumorphic-password">Password</label>
+                <input type="password" name="password" id="neumorphic-password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn">Sign in</button>
+        </form>
+        <div class="neumorphic-card__footer">
+            <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

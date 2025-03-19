@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Add Product{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Add New Product</h2>
+    <form method="POST" action="{{ url_for('product.add_product') }}" enctype="multipart/form-data" class="neumorphic-form">
+        <div class="neumorphic-input-wrapper">
+            <label for="product-name">Product Name</label>
+            <input type="text" name="name" id="product-name" required>
+        </div>
+        <div class="neumorphic-input-wrapper">
+            <label for="product-price">Price</label>
+            <input type="number" name="price" id="product-price" step="0.01" required>
+        </div>
+        <div class="neumorphic-input-wrapper">
+            <label for="product-description">Description</label>
+            <textarea name="description" id="product-description" rows="4"></textarea>
+        </div>
+        <div class="neumorphic-input-wrapper">
+            <label for="product-category">Category</label>
+            <input type="text" name="category" id="product-category">
+        </div>
+        <div class="neumorphic-input-wrapper">
+            <label for="product-file">Upload PDF</label>
+            <input type="file" name="file" id="product-file" accept="application/pdf" required>
+        </div>
+        <button type="submit">Add Product</button>
+    </form>
+</div>
+{% endblock %}
