@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container">
-    <h2>{{ product.name }}</h2>
+    <h2>{{ product.title }}</h2>
     <div id="pdf-viewer" style="width: 100%; height: 600px; border: none;"></div>
 </div>
 <script src="{{ url_for('static', filename='js/pdf.min.js') }}"></script>

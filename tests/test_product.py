@@ -20,7 +20,7 @@ class ProductTestCase(unittest.TestCase):
         """Test adding a new product"""
         with app.app_context():
             product = Product(
-                name="Test PDF",
+                title="Test PDF",  # Changed from name to title
                 description="A sample PDF",
                 file_path="/files/sample.pdf",
                 category="Education",
@@ -30,7 +30,7 @@ class ProductTestCase(unittest.TestCase):
             db.session.commit()
 
             saved_product = Product.query.first()
-            self.assertEqual(saved_product.name, "Test PDF")
+            self.assertEqual(saved_product.title, "Test PDF")  # Changed from name to title
             self.assertEqual(saved_product.description, "A sample PDF")
             self.assertEqual(saved_product.file_path, "/files/sample.pdf")
             self.assertEqual(saved_product.category, "Education")

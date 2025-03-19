@@ -13,7 +13,7 @@ bp = Blueprint('product', __name__)
 def product_list():
     search_query = request.args.get('search', '').strip()
     if search_query:
-        products = Product.query.filter(Product.name.ilike(f"%{search_query}%")).all()
+        products = Product.query.filter(Product.title.ilike(f"%{search_query}%")).all()  # Changed from name to title
     else:
         products = Product.query.all()
     return render_template('products.html', products=products)
@@ -37,7 +37,7 @@ def add_product():
         file.save(file_path)
 
         new_product = Product(
-            name=name,
+            title=name,  # Changed from name to title
             price=float(price),
             description=description,
             category=category,
