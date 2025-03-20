@@ -28,7 +28,7 @@ def create_app():
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
     # Initialize database and extensions
-    from models import db
+    from models import db  # Import db from models
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)

@@ -5,6 +5,9 @@
 {% block content %}
 <div class="container">
     <h2>Add New Product</h2>
+    {% if current_user.is_authenticated and current_user.is_admin %}
+    <a href="{{ url_for('product.add_product') }}" class="btn">Add New Product</a>
+    {% endif %}
     <form method="POST" action="{{ url_for('product.add_product') }}" enctype="multipart/form-data" class="neumorphic-form">
         <div class="neumorphic-input-wrapper">
             <label for="product-name">Product Name</label>

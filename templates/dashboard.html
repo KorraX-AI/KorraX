@@ -7,10 +7,12 @@
     <h2>Dashboard</h2>
     <p>Welcome, {{ user.username }}!</p>
 
+    {% if user.is_admin %}
     <div class="dashboard-links">
         <a href="{{ url_for('product.add_product') }}" class="btn">Add New Product</a>
         <a href="{{ url_for('product.product_list') }}" class="btn">Manage Products</a>
     </div>
+    {% endif %}
 
     <div class="user-stats">
         <h3>Your Subscribed Products</h3>

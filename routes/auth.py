@@ -11,6 +11,7 @@ def register():
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
+        is_admin = request.form.get('is_admin') == 'on'  # Checkbox for admin
 
         if not username or not email or not password:
             flash("All fields are required!", "danger")
@@ -21,7 +22,7 @@ def register():
             flash('Username or Email already exists.', 'danger')
             return redirect(url_for('auth.register'))
 
-        new_user = User(username=username, email=email)
+        new_user = User(username=username, email=email, is_admin=is_admin)
         new_user.set_password(password)  # ✅ Hash password before storing
 
         db.session.add(new_user)
@@ -44,26 +45,20 @@ def login():
 
         if not email or not password:
             flash("Email and password are required.", "danger")
-            print("Login failed: Missing email or password")  # Debug log
             return redirect(url_for('auth.login'))
 
         user = User.query.filter_by(email=email).first()
 
-        if user:
-            print(f"User found: {user.email}")  # Debug log
-        else:
-            print("Login failed: No user found with the provided email")  # Debug log
-
         if user and user.check_password(password):
             login_user(user)
             flash("Login successful!", "success")
-            print("Login successful!")  # Debug log
 
+            # Redirect to the next page or dashboard
             next_page = request.args.get("next")
             return redirect(next_page) if next_page else redirect(url_for("main.dashboard"))
         else:
             flash("Invalid email or password.", "danger")
-            print("Login failed: Invalid credentials")  # Debug log
+            return redirect(url_for('auth.login'))  # Redirect back to login on failure
 
     return render_template('login.html')
 
